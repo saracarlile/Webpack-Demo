@@ -21,7 +21,9 @@ const common = {
   // We'll be using the latter form given it's
   // convenient with more complex configurations.
   entry: {
-    app: PATHS.app
+    app: PATHS.app,
+    vendor: ['react']
+
   },
   output: {
     path: PATHS.build,
@@ -42,6 +44,17 @@ switch(process.env.npm_lifecycle_event) {
   case 'build':
     config = merge(
       common,
+      {
+        devtool: 'source-map',
+         output: {
+          path: PATHS.build,
+          filename: '[name].[chunkhash].js',
+          // This is used for require.ensure. The setup
+          // will work without but this is useful to set.
+          chunkFilename: '[chunkhash].js'
+        }
+      },
+      parts.clean(PATHS.build),
       parts.setFreeVariable(
         'process.env.NODE_ENV',
         'production'
@@ -53,6 +66,9 @@ switch(process.env.npm_lifecycle_event) {
   default:
     config = merge(
       common,
+      {
+        devtool: 'eval-source-map'
+      },
       parts.setupCSS(PATHS.app),
       parts.devServer({
         // Customize host/port here if needed
