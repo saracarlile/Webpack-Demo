@@ -60,7 +60,8 @@ switch(process.env.npm_lifecycle_event) {
         'production'
       ),
       parts.minify(),
-      parts.setupCSS(PATHS.app)
+      parts.extractCSS(PATHS.app)
+
     );
     break;
   default:
